@@ -16,6 +16,82 @@ def get_trino_connection():
         http_scheme="https"
     )
 
+@tool
+def ask_database(query: str) -> str:
+    """
+    Executes a pure Trino SQL query string against the database and returns the result.
+    Use this to inspect information_schema tables or retrieve analytical metrics.
+    Do NOT include trailing semicolons or markdown code blocks in the query argument.
+    """
+    print("\n\nSQL tool called")
+    print(f"SQL Query used:\n{query}")
+    conn = get_trino_connection()
+    cursor = conn.cursor()
+    clean_query = query.strip().rstrip(';')
+    try:
+        cursor.execute(clean_query)
+        rows = cursor.fetchall()
+        columns = [desc[0] for desc in cursor.description]
+        df = pd.DataFrame(rows, columns=columns)
+        
+        # Ekdum clean aur direct output
+        return df.to_markdown(index=False)
+    except Exception as e:
+        return f"Database Error: {str(e)}"
+    finally:
+        cursor.close()
+        conn.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # @tool
 # def ask_database(query: str) -> str:
@@ -85,28 +161,3 @@ def get_trino_connection():
 
 
 
-@tool
-def ask_database(query: str) -> str:
-    """
-    Executes a pure Trino SQL query string against the database and returns the result.
-    Use this to inspect information_schema tables or retrieve analytical metrics.
-    Do NOT include trailing semicolons or markdown code blocks in the query argument.
-    """
-    print("SQL tool called")
-    print(f"SQL Query used:{query}")
-    conn = get_trino_connection()
-    cursor = conn.cursor()
-    clean_query = query.strip().rstrip(';')
-    try:
-        cursor.execute(clean_query)
-        rows = cursor.fetchall()
-        columns = [desc[0] for desc in cursor.description]
-        df = pd.DataFrame(rows, columns=columns)
-        
-        # Ekdum clean aur direct output
-        return df.to_markdown(index=False)
-    except Exception as e:
-        return f"Database Error: {str(e)}"
-    finally:
-        cursor.close()
-        conn.close()

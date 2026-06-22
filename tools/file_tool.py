@@ -7,7 +7,7 @@ def save_to_markdown(filename: str, content: str) -> str:
     Saves the final data metrics, analytical breakdown, and SQL queries into a structured Markdown (.md) file.
     Use this tool ONLY when you have compiled the final answer matrix and are ready to deliver the complete report to the user.
     """
-    print("Markdown Tool Called")
+    print("Markdown Tool Called\n")
     try:
         # Ensure outputs directory exists
         os.makedirs("outputs", exist_ok=True)
