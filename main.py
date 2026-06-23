@@ -369,7 +369,6 @@ import sys
 from graph.workflow import graph
 from langchain_core.messages import HumanMessage
 
-# Global spinner control karne ke liye task list
 spinner_task = None
 
 async def spin_loading(message="Fetching data from Trino Database... Please wait"):
@@ -445,12 +444,7 @@ async def run_chat():
                     spinner_task.cancel()
                     await asyncio.sleep(0.05)
                 print("✅ Done.", flush=True)
-            
-            # 3. Jab LLM internally text generate kar raha hota hai (streaming chunks)
-            elif kind == "on_chat_model_stream":
-                content = event["data"]["chunk"].content
-                if content:
-                    print(content, end="", flush=True)
+
 
             # 4. 🔥 HAR STEP KE END ME EXACTLY NEECHE METRICS DIKHANA
             elif kind == "on_chat_model_end":
@@ -464,28 +458,28 @@ async def run_chat():
                         total_tokens = usage.get("total_tokens", 0)
                         
                         input_details = usage.get("input_token_details", {})
-                        cache_tokens = input_details.get("cached", 0) if input_details else 0
+                        # cache_tokens = input_details.get("cache", 0) if input_details else 0
+                        if input_details:
+                            cache_tokens = input_details.get("cache", input_details.get("cached", 0))
+                        else:
+                            cache_tokens = 0
                         fresh_input_tokens = input_tokens - cache_tokens
                         
-                        # Pricing Calculations
+                        # Pricing Calculations (Aapke rates ke hisab se)
                         cost_fresh = fresh_input_tokens * fresh_rate
                         cost_cached = cache_tokens * cached_rate
                         cost_output = output_tokens * output_rate
                         total_cost = cost_fresh + cost_cached + cost_output
                         
-                        # Force formatting newline taaki mix na ho
-                        print("\n")
-                        print("==========================================================")
-                        print("📊 STEP METRICS REPORT (GPT-5.4 mini)")
-                        print("==========================================================")
-                        print(f"🔹 Context Inputs   : {input_tokens} [Fresh: {fresh_input_tokens} | Cached: {cache_tokens} ⚡]")
-                        print(f"🔹 Model Outputs    : {output_tokens}")
-                        print(f"🔹 Total Transacted : {total_tokens}")
-                        print(f"💵 Transaction Cost : ${total_cost:.6f}")
+                        print("\n==========================================================")
+                        print("🎛️ TOKENS USAGE REPORT")
+                        print(f"🔹 Total Context  : {input_tokens} [Fresh: {fresh_input_tokens} | Cached: {cache_tokens} ⚡]")
+                        print(f"🔹 Model Outputs  : {output_tokens} | Total Transacted: {total_tokens}")
+                        print(f"💵 Step Price     : ${total_cost:.6f}")
                         print("==========================================================\n")
                 except Exception as e:
-                    pass
-                    
+                    pass    
+            
         print("\n") # Har conversation turn ke baad spacing
 
 def run():
@@ -493,3 +487,149 @@ def run():
 
 if __name__ == "__main__":
     run()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#             # 3. Jab LLM internally text generate kar raha hota hai (streaming chunks)
+#             elif kind == "on_chat_model_stream":
+#                 content = event["data"]["chunk"].content
+#                 if content:
+#                     print(content, end="", flush=True)
+
+#             # 4. 🔥 HAR STEP KE END ME EXACTLY NEECHE METRICS DIKHANA
+#             elif kind == "on_chat_model_end":
+#                 try:
+#                     output_data = event["data"].get("output", {})
+#                     usage = getattr(output_data, "usage_metadata", None)
+                    
+#                     if usage:
+#                         input_tokens = usage.get("input_tokens", 0)
+#                         output_tokens = usage.get("output_tokens", 0)
+#                         total_tokens = usage.get("total_tokens", 0)
+                        
+#                         input_details = usage.get("input_token_details", {})
+#                         cache_tokens = input_details.get("cache", 0) if input_details else 0
+#                         fresh_input_tokens = input_tokens - cache_tokens
+                        
+#                         # Pricing Calculations
+#                         cost_fresh = fresh_input_tokens * fresh_rate
+#                         cost_cached = cache_tokens * cached_rate
+#                         cost_output = output_tokens * output_rate
+#                         total_cost = cost_fresh + cost_cached + cost_output
+                        
+#                         # Force formatting newline taaki mix na ho
+#                         print("\n")
+#                         print("==========================================================")
+#                         print("📊 STEP METRICS REPORT (GPT-5.4 mini)")
+#                         print("==========================================================")
+#                         print(f"🔹 Context Inputs   : {input_tokens} [Fresh: {fresh_input_tokens} | Cached: {cache_tokens} ⚡]")
+#                         print(f"🔹 Model Outputs    : {output_tokens}")
+#                         print(f"🔹 Total Transacted : {total_tokens}")
+#                         print(f"💵 Transaction Cost : ${total_cost:.6f}")
+#                         print("==========================================================\n")
+#                 except Exception as e:
+#                     pass
+                    
+
