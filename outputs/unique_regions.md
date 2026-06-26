@@ -1,0 +1,328 @@
+# Unique Regions
+
+Source: `icebergrest.gold.sku_analytics_city`
+
+## Regions
+
+- Dubai Marina
+- Al Nahyan
+- Al Naeem Mall
+- Khor Fakkan
+- Rabwah
+- Majan Public Park
+- Tuwaiq
+- An Nada
+- Al-Safa
+- Al Aqiq
+- Muhaisanah 2
+- Al Hamriya Port
+- MBZ 2
+- Uhud
+- Nadd Al Hamar
+- Umm Suqeim
+- Al Qusais 3
+- Al Naeem City Center
+- Al jurf 3
+- Al Taawun
+- An Narjis
+- Al-Manar
+- Al Raha beach
+- Oud Metha
+- Bani Yas Bus Station
+- Production City
+- Al Rawdha
+- An Noor
+- Mada'en Al-Fahd
+- Al Jurf Industrial Area 1
+- Muwaileh Commercial
+- Al Falah
+- Al Satwa Road
+- Al Qirawan
+- Al Sanabel
+- International City, Greece Cluster - L 05
+- Dubai Motor City
+- Mirdif
+- Al Forsan Village
+- Al Barsha
+- An Nasim
+- Al Mahdiyah
+- Hor Al Anz Park
+- Al Jaddaf Rotana Suite Hotel
+- Shakhbout City
+- Khalifa City 2
+- DIP
+- Mumbai-Region
+- Al Barsha South
+- Rawdah 2
+- 2 Al Yasmeen Street
+- Al Lulu
+- Dubai Investment Park
+- national
+- Al Muteena
+- Al Rashidiya
+- Waha Mall
+- Abu Shaghara
+- Al Zahiyah
+- Al Garhoud
+- City Walk
+- Al Naseem
+- Al Muruj
+- Al-Hamra'a
+- An Nuzhah
+- JVC
+- Al Warqa 2 Park
+- Umm Al Quwain
+- Al Jaradiyah
+- An Nafal
+- 2 Jabal tuwaiq
+- Meydan 2BR Apartment with Parking
+- Marina 2
+- Al Salamah
+- Townsquare
+- Al Nadwa
+- Al Mursalat
+- Al Muntazah
+- Al Nakheel
+- NT
+- Makkah Region
+- Dubai Investments Park 1
+- Muweilah 2
+- Town Square 2 (NShama)
+- Marina
+- Diriyah
+- Delhi-NCR
+- Business Bay
+- Alquoz
+- Nad Al Sheba
+- Al Bawadi
+- Al Owaid
+- Al Khuzama
+- Muweilah
+- Al Khawaneej
+- Jumeirah 1
+- Al Nasserya
+- Al Ghubaiba
+- Shahamah
+- 20UR Coffee Mohamed Bin Zayed City
+- Dammam Restaurant
+- Damac Hills 2
+- Arabian Center
+- VIC
+- Al Mursilat
+- Dhahrat Al Badi'ah
+- Ad Dahiah
+- Bani Yas
+- The Palm Jumeirah
+- Al Nahda 2
+- Al Furjan
+- As Sulay
+- Al Riyadh
+- Kolkata-Region
+- Al Qusais 2
+- Arabian Ranches 3
+- Qurtubah
+- Al Hamadaniyyah
+- Hyderabad-Region
+- Al Nahda
+- Al Hamidiya 1
+- Dubai Silicon Oasis
+- Al Khaleej
+- Al Maizilah
+- Rest Of India
+- Al Barsha 1
+- International City
+- Al Qasimia
+- Khalidiyah Park
+- Al Malqa
+- Al Olaya
+- Al Ghadir
+- Uqadh
+- Al Barsha
+- nan
+- Al Majaz 3
+- Dubai Silicon Oasis
+- Al Hamra
+- Dubai South
+- Waha
+- Al Yamamah
+- Icad
+- JVC 2
+- Al Quoz 3
+- Nahda
+- Al Majaz 3
+- ACT
+- Al Janadriyyah
+- Al Maather
+- Al Qadisiyyah
+- Madinat Khalifa - A
+- Bani Yas 2
+- Saadiyat
+- Dubai Festival City Mall
+- Jebel Ali Village
+- Ar Rawabi
+- Dhahrat Laban
+- Quwaizah
+- Aluraija Al Gharbiyah
+- Dubailand
+- 44B Street
+- Dubai Sports City
+- Al Reem Island
+- Al Warqaa
+- Marina Promenade
+- Al Quoz 2
+- TAS
+- Al Muntazahat
+- Al Bahya
+- Bur Dubai 2
+- Nasseriya
+- Hittin
+- Ishbiliyah
+- Al Malaz
+- Shubra
+- Madinah Region
+- Bryman
+- Al Markaziyah West
+- Al Shamkhah
+- Dubai Healthcare City
+- France
+- Olaya
+- Mishrifah
+- Alawali
+- Al Barsha 2
+- Al Munsiyah
+- Al Raha
+- Mussafah East
+- Shakhbout
+- Mohammed Bin Zayed City
+- 3 Marina Promenade
+- Sobha Hartland
+- Saihat
+- Bengaluru-Region
+- Al Quoz Industrial Area 1
+- Zakher
+- Al Barsha Heights Tecom
+- Deira
+- Al Jaddaf
+- Al Wurud
+- Historic Jeddah
+- Al Uraibi
+- NSW
+- Ghirnatah
+- Al Faisaliyyah
+- Madinat Khalifa A
+- Zayed City
+- Mirdif 25
+- Liwan
+- Umm al hammam
+- Rabiyah Street
+- Al Satwa 2
+- Sheikh Ammar Bin Humaid Street
+- Al Satwa
+- South Obhur ( House - Al-Sanouci )، Ubaydullah Al Madani
+- Umm Ramool
+- Al Taawun Street
+- Nadd Al Hamar
+- Deira
+- Al Mankhool
+- Dubai Media City
+- Muhaisnah 4
+- As Sulimaniyah
+- Ar Rafiah
+- Al Mathar Ash Shamali
+- An Nasim Al Gharbi
+- Al Hosn
+- Al Satwa
+- Downtown
+- Ar Rawdah
+- As Sahafah
+- Al Safa
+- Al Wahdah
+- Majan
+- 22 Building Bur Dubai
+- JLT
+- suwaidi riyadh
+- Irqah
+- SEA
+- Dubai South Residential District
+- Al Barsha 2
+- Khalidiyah
+- Bur Dubai
+- JVC
+- JVT District 4 E20
+- QLD
+- Taiba
+- Naimeya 1
+- Jumeirah
+- International City
+- Al Khalidiyyah
+- Ar Rimal
+- Eastern Province
+- Ar Rahmaniyyah
+- Namar
+- Al Aarid
+- Al Nahyaniya School
+- WAREHOUSE
+- Al Rahmania
+- Rumailah Café
+- Al majaz park
+- Meydan
+- Al Mohammadiyyah
+- Industrial Area
+- Al wasl village al qusais industrial 5
+- Souk Extra
+- 2 Al Arid
+- Thulaim
+- FURJAN
+- Refa`ah
+- Al Shamkha
+- Al Wathba
+- Al Yasmeen
+- Al Qusais 2
+- Al Saadah (Danat)
+- Dubai Studio City
+- Dubai Hills
+- Al Aziziyah
+- Al-Masani'
+- Muwaileh
+- Laban 2- Qirawan
+- Khorfakkan Waterfalls
+- Al Zahraa
+- Emirates Hills
+- Dalia Nursery
+- Discovery Gardens
+- Al Mu'tarid
+- Motor City
+- Motor City
+- Arjan
+- Al Murjan
+- Ash Shati
+- Al Khibeesi
+- Al Fisht
+- Khalidiyah
+- Rawda 3
+- Arjan 2
+- Al Mushrif
+- Al Zahiyah
+- Nad Al Sheba Mall by Dubai Retail
+- SA
+- Mathar
+- Al Tawfiq
+- Oud Metha
+- Industrial Area 6
+- Al Nahda 1
+- Al Qusais
+- Ar Rabwah
+- Al Towayya
+- Al Rawda 3 Al Zahraa
+- Deira 3
+- Al Nahda
+- WA
+- Al Manar
+- Al Wadi
+- Hamdaniya
+- An Nakheel
+- Dubai Investments Park
+- An Namudhajiyah
+- Ash Shifa
+- Rumailah Building
+- Al Majaz

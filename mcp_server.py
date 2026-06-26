@@ -201,9 +201,111 @@
 #     uvicorn.run(app, host="127.0.0.1", port=8000)
 
 
+#---------------------------------------------------------------------------------------------------------------
+# import os
+# import sys
+# import pandas as pd
+# import trino
+# from dotenv import load_dotenv
+# from mcp.server.fastmcp import FastMCP
+
+# # .env file se configurations load karne ke liye
+# load_dotenv()
+
+# # FastMCP instance initialize karein strictly stdio transport support ke sath
+# mcp = FastMCP("Analytics Copilot Server")
+
+# # ---------------------------------------------------------
+# # Trino Connection Helper
+# # ---------------------------------------------------------
+# def get_trino_connection():
+#     return trino.dbapi.connect(
+#         host=os.getenv("TRINO_HOST"),
+#         port=int(os.getenv("TRINO_PORT", 443)),
+#         user=os.getenv("TRINO_USER"),
+#         http_scheme="https"
+#     )
+
+# # ---------------------------------------------------------
+# # Tool 1: Ask Database (SQL Tool)
+# # ---------------------------------------------------------
+# @mcp.tool()
+# def ask_database(query: str) -> str:
+#     """
+#     Executes a pure Trino SQL query string against the database and returns the result in Markdown table format.
+#     Do NOT include trailing semicolons or markdown code blocks in the query argument.
+#     """
+#     # sys.stderr use kar rahe hain taaki stdio protocol channel break na ho
+#     print(f"\n[MCP SERVER LOG] Executing SQL Query:\n{query}", file=sys.stderr)
+    
+#     conn = get_trino_connection()
+#     cursor = conn.cursor()
+#     clean_query = query.strip().rstrip(';')
+#     try:
+#         cursor.execute(clean_query)
+#         rows = cursor.fetchall()
+#         columns = [desc[0] for desc in cursor.description]
+#         df = pd.DataFrame(rows, columns=columns)
+        
+#         # STRICT SIZE GUARDRAIL FOR CONTEXT SAFETY (Max 15 rows)
+#         # if len(df) > 15:
+#         #     preview = df.head(15).to_markdown(index=False)
+#         #     return (
+#         #         f"{preview}\n\n"
+#         #         f"⚠️ NOTICE: Total rows returned were {len(df)}. "
+#         #         f"Only the top 15 rows are shown above to prevent memory overflow."
+#         #     )
+            
+#         if df.empty:
+#             return "Query executed successfully. Result: 0 rows returned (Empty dataset)."
+            
+#         return df.to_markdown(index=False)
+#     except Exception as e:
+#         return f"Database Error: {str(e)}"
+#     finally:
+#         cursor.close()
+#         conn.close()
+
+# # ---------------------------------------------------------
+# # Tool 2: Save To Markdown (File Tool)
+# # ---------------------------------------------------------
+# @mcp.tool()
+# def save_to_markdown(filename: str, content: str) -> str:
+#     """
+#     Saves the final data metrics, analytical breakdown, and SQL queries into a structured Markdown (.md) file inside the 'outputs' directory.
+#     """
+#     print(f"\n[MCP SERVER LOG] Exporting file: {filename}", file=sys.stderr)
+#     try:
+#         # Ensure outputs directory exists
+#         os.makedirs("outputs", exist_ok=True)
+        
+#         # Clean the filename to ensure it ends with .md
+#         if not filename.endswith(".md"):
+#             filename = f"{filename}.md"
+            
+#         filepath = os.path.join("outputs", filename)
+        
+#         with open(filepath, "w", encoding="utf-8") as f:
+#             f.write(content)
+            
+#         return f"Success: Final report safely exported to Markdown file at '{filepath}'."
+#     except Exception as e:
+#         return f"Error saving file: {str(e)}"
+
+# # Standard execution flow execution configuration
+# if __name__ == "__main__":
+#     # transport='stdio' rakhna compulsory hai taaki python sub-processes smoothly link ho sakein
+#     mcp.run(transport='stdio')
+
+
+#----------------------------------------------------------------------------------------------------    
+
+
+
 
 import os
 import sys
+import json
 import pandas as pd
 import trino
 from dotenv import load_dotenv
@@ -215,84 +317,77 @@ load_dotenv()
 # FastMCP instance initialize karein strictly stdio transport support ke sath
 mcp = FastMCP("Analytics Copilot Server")
 
-# ---------------------------------------------------------
+# -------------------------------------------------------------------------
 # Trino Connection Helper
-# ---------------------------------------------------------
+# -------------------------------------------------------------------------
 def get_trino_connection():
+    # .env variables ko verify karke connect karte hain
+    host = os.getenv("TRINO_HOST")
+    port = os.getenv("TRINO_PORT", "443")
+    user = os.getenv("TRINO_USER", "admin")
+    
+    # CRITICAL: Yahan logs sirf stderr par hi hone chahiye taaki protocol transport break na ho
+    print(f"[MCP DB SERVER LOG] Connecting to Trino Host: {host} on Port: {port} as User: {user}", file=sys.stderr)
+    
     return trino.dbapi.connect(
-        host=os.getenv("TRINO_HOST"),
-        port=int(os.getenv("TRINO_PORT", 443)),
-        user=os.getenv("TRINO_USER"),
+        host=host,
+        port=int(port),
+        user=user,
         http_scheme="https"
     )
 
-# ---------------------------------------------------------
+# -------------------------------------------------------------------------
 # Tool 1: Ask Database (SQL Tool)
-# ---------------------------------------------------------
-@mcp.tool()
+# -------------------------------------------------------------------------
+@mcp.tool(
+    name="ask_database",
+    description="Executes a pure Trino SQL query string against the analytics database and returns the result in Markdown table format. Do NOT include trailing semicolons or markdown code blocks in the query argument."
+)
 def ask_database(query: str) -> str:
-    """
-    Executes a pure Trino SQL query string against the database and returns the result in Markdown table format.
-    Do NOT include trailing semicolons or markdown code blocks in the query argument.
-    """
-    # sys.stderr use kar rahe hain taaki stdio protocol channel break na ho
-    print(f"\n[MCP SERVER LOG] Executing SQL Query:\n{query}", file=sys.stderr)
+    # Logger using sys.stderr to safe guard JSON-RPC stdout pipe
+    print(f"\n[MCP DB SERVER LOG] Received SQL Query Execution Request:\n{query}", file=sys.stderr)
     
-    conn = get_trino_connection()
-    cursor = conn.cursor()
-    clean_query = query.strip().rstrip(';')
     try:
+        conn = get_trino_connection()
+        cursor = conn.cursor()
+        
+        # Semicolon clear pipeline format guardrail
+        clean_query = query.strip().rstrip(';')
         cursor.execute(clean_query)
+        
         rows = cursor.fetchall()
         columns = [desc[0] for desc in cursor.description]
         df = pd.DataFrame(rows, columns=columns)
         
-        # STRICT SIZE GUARDRAIL FOR CONTEXT SAFETY (Max 15 rows)
+        # # STRICT SIZE GUARDRAIL FOR CONTEXT WINDOW SAFETY
         # if len(df) > 15:
         #     preview = df.head(15).to_markdown(index=False)
+        #     print(f"[MCP DB SERVER LOG] Data size warning: Total {len(df)} rows. Truncating to 15.", file=sys.stderr)
         #     return (
         #         f"{preview}\n\n"
         #         f"⚠️ NOTICE: Total rows returned were {len(df)}. "
-        #         f"Only the top 15 rows are shown above to prevent memory overflow."
+        #         f"Only the top 15 rows are shown above to prevent token context overflow."
         #     )
             
         if df.empty:
             return "Query executed successfully. Result: 0 rows returned (Empty dataset)."
             
         return df.to_markdown(index=False)
-    except Exception as e:
-        return f"Database Error: {str(e)}"
+        
+    except Exception as db_err:
+        error_msg = f"Database Execution Error: {str(db_err)}"
+        print(f"[MCP DB SERVER LOG] ERROR: {error_msg}", file=sys.stderr)
+        return error_msg
+        
     finally:
-        cursor.close()
-        conn.close()
+        try:
+            cursor.close()
+            conn.close()
+            print("[MCP DB SERVER LOG] Connections safely closed.", file=sys.stderr)
+        except NameError:
+            pass  # Variable initialize nahi hui thi agar pehle hi step par crash hua
 
-# ---------------------------------------------------------
-# Tool 2: Save To Markdown (File Tool)
-# ---------------------------------------------------------
-@mcp.tool()
-def save_to_markdown(filename: str, content: str) -> str:
-    """
-    Saves the final data metrics, analytical breakdown, and SQL queries into a structured Markdown (.md) file inside the 'outputs' directory.
-    """
-    print(f"\n[MCP SERVER LOG] Exporting file: {filename}", file=sys.stderr)
-    try:
-        # Ensure outputs directory exists
-        os.makedirs("outputs", exist_ok=True)
-        
-        # Clean the filename to ensure it ends with .md
-        if not filename.endswith(".md"):
-            filename = f"{filename}.md"
-            
-        filepath = os.path.join("outputs", filename)
-        
-        with open(filepath, "w", encoding="utf-8") as f:
-            f.write(content)
-            
-        return f"Success: Final report safely exported to Markdown file at '{filepath}'."
-    except Exception as e:
-        return f"Error saving file: {str(e)}"
-
-# Standard execution flow execution configuration
+# Standard execution flow execution configuration for Stdio Protocol
 if __name__ == "__main__":
-    # transport='stdio' rakhna compulsory hai taaki python sub-processes smoothly link ho sakein
+    # CRITICAL: Stdio protocol ko run karne ke liye default transport='stdio' hona compulsory hai
     mcp.run(transport='stdio')
