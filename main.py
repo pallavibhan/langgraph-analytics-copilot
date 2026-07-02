@@ -14,11 +14,34 @@ from mcp.client.sse import sse_client
 
 # LangChain toolkit adapter for Model Context Protocol
 from langchain_mcp import MCPToolkit
-
+from agents.query_bot import model
 # Dynamic graph compiler
 from graph.workflow import create_graph
 
 load_dotenv()
+PRICING_TABLE = {
+    "gpt-4o": {
+        "fresh_rate": 2.50 / 1000000,
+        "cached_rate": 1.25 / 1000000,
+        "output_rate": 10.00 / 1000000
+    },
+    "gpt-4o-mini": {
+        "fresh_rate": 0.150 / 1000000,
+        "cached_rate": 0.075 / 1000000,
+        "output_rate": 0.600 / 1000000
+    },
+    "claude-3-5-sonnet": {
+        "fresh_rate": 3.00 / 1000000,
+        "cached_rate": 0.30 / 1000000,
+        "output_rate": 15.00 / 1000000
+    },
+    # Fallback default rates configuration rules (Aapke original values)
+    "gpt-5.4-mini": {
+        "fresh_rate": 0.75 / 1000000,
+        "cached_rate": 0.075 / 1000000,
+        "output_rate": 4.50 / 1000000
+    }
+}
 
 spinner_task = None
 
@@ -39,11 +62,23 @@ async def spin_loading(message="Fetching data from Trino Database... Please wait
 async def run_chat():
     global spinner_task
     session_id = str(uuid.uuid4())
+
+
+    
     
     # Pricing rates configuration rules
-    fresh_rate = 0.75 / 1000000
-    cached_rate = 0.075 / 1000000
-    output_rate = 4.50 / 1000000
+    # fresh_rate = 0.75 / 1000000
+    # cached_rate = 0.075 / 1000000
+    # output_rate = 4.50 / 1000000
+
+    pricing = PRICING_TABLE.get(
+        model.model_name,
+        PRICING_TABLE["gpt-5.4-mini"]  # fallback model
+    )
+
+    fresh_rate = pricing["fresh_rate"]
+    cached_rate = pricing["cached_rate"]
+    output_rate = pricing["output_rate"]
     
     print("🤖 Autonomous AI Data Analyst Initialized (Dual Transport MCP Enabled).")
     
@@ -166,7 +201,7 @@ async def run_chat():
                                         total_tokens = usage.get("total_tokens", 0)
                                         
                                         input_details = usage.get("input_token_details", {})
-                                        cache_tokens = input_details.get("cache", input_details.get("cached", 0)) if input_details else 0
+                                        cache_tokens = input_details.get("cache_read", input_details.get("cached", 0)) if input_details else 0
                                         fresh_input_tokens = input_tokens - cache_tokens
                                         
                                         cost_fresh = fresh_input_tokens * fresh_rate
@@ -190,6 +225,12 @@ def run():
 
 if __name__ == "__main__":
     run()
+
+
+
+
+#========================================================================
+
 
 
 
